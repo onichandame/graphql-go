@@ -48,10 +48,12 @@ func GetResolverFromStruct(instance interface{}, inputType *graphql.Object) (res
 			continue
 		}
 		validateFunc(&m)
+		argsObject := GetObjectFromStruct(reflect.New(m.Type.In(0)).Interface(), INPUT)
 		args := make(graphql.FieldConfigArgument)
-		argsType := m.Type.In(0)
-		for i := 0; i < argsType.NumField(); i++ {
-			field := argsType.Field(i)
+		for _, field := range argsObject.Fields {
+			args[field.Name] = &graphql.ArgumentConfig{
+				Type: field.Type,
+			}
 		}
 		(*fields)[name] = &graphql.Field{
 			Type: inputType,

@@ -35,3 +35,11 @@ func getTags(field *reflect.StructField) (res map[string]string) {
 	}
 	return res
 }
+
+func unwrapPtr(t reflect.Type) reflect.Type {
+	if t.Kind() == reflect.Ptr {
+		return unwrapPtr(t.Elem())
+	} else {
+		return t
+	}
+}
