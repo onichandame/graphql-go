@@ -28,6 +28,9 @@ func TestResolver(t *testing.T) {
 	assert.NotNil(t, query)
 	assert.Contains(t, query, "greet")
 	greet := query["greet"]
-	greetoutput := getObjectType(reflect.TypeOf(&Output{}), OUTPUT)
+	greetoutput := getObjectType(reflect.TypeOf(Output{}), OUTPUT)
 	assert.Equal(t, greetoutput, greet.Type)
+	msg, _ := greet.Resolve(graphql.ResolveParams{Args: map[string]interface{}{"name": "world"}})
+	assert.IsType(t, Output{}, msg)
+	assert.Equal(t, "hello world", msg.(Output).Greeting)
 }

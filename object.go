@@ -22,9 +22,9 @@ func getObjectType(objtype reflect.Type, cat typeCategory) (t graphql.Type) {
 	var ok bool
 	switch cat {
 	case INPUT:
-		_, ok = CustomInObjects[objtype]
+		t, ok = CustomInObjects[objtype]
 	case OUTPUT:
-		_, ok = CustomOutObjects[objtype]
+		t, ok = CustomOutObjects[objtype]
 	default:
 		panic(fmt.Errorf("object category %d not valid", cat))
 	}

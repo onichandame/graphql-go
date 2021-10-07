@@ -24,6 +24,7 @@ func getResolver(objtype reflect.Type) (query graphql.Fields, mutation graphql.F
 	objvalue := reflect.New(objtype)
 	methods := objvalue.NumMethod()
 	for i := 0; i < methods; i++ {
+		operationvalue := objvalue.Method(i)
 		operationtype := objvalue.Type().Method(i)
 		var name string
 		var operation string
@@ -53,7 +54,8 @@ func getResolver(objtype reflect.Type) (query graphql.Fields, mutation graphql.F
 			}
 			field.Resolve = func(p graphql.ResolveParams) (res interface{}, err error) {
 				defer goutils.RecoverToErr(&err)
-				res = operationtype.Func.Call([]reflect.Value{reflect.ValueOf(nil), reflect.ValueOf(p)})[0].Interface()
+				res = operationvalue.Call([]reflect.Value{reflect.ValueOf(p), reflect.New(operationtype.Type.In(2)).Elem()})[0].Interface()
+				fmt.Print(res)
 				return res, err
 			}
 			switch operation {
