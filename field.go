@@ -49,5 +49,8 @@ func getFieldType(fieldtype reflect.Type, tags map[string]string, cat typeCatego
 			panic(fmt.Errorf("cannot recognize type of field %s", fieldtype.Name()))
 		}
 	}
+	if _, ok := tags["not null"]; ok {
+		t = graphql.NewNonNull(t)
+	}
 	return t
 }

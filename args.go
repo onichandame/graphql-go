@@ -7,6 +7,7 @@ import (
 )
 
 func getArgs(argstype reflect.Type) (t graphql.FieldConfigArgument) {
+	argstype = unwrapPtr(argstype)
 	t = make(graphql.FieldConfigArgument)
 	for i := 0; i < argstype.NumField(); i++ {
 		fieldtype := argstype.Field(i)

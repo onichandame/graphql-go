@@ -18,6 +18,7 @@ const (
 )
 
 func getObjectType(objtype reflect.Type, cat typeCategory) (t graphql.Type) {
+	objtype = unwrapPtr(objtype)
 	var ok bool
 	switch cat {
 	case INPUT:
@@ -78,11 +79,13 @@ func getObjectType(objtype reflect.Type, cat typeCategory) (t graphql.Type) {
 		case INPUT:
 			CustomInObjects[objtype] = graphql.NewInputObject(graphql.InputObjectConfig{
 				Fields: fields,
+				Name:   objtype.Name(),
 			})
 			t = CustomInObjects[objtype]
 		case OUTPUT:
 			CustomOutObjects[objtype] = graphql.NewObject(graphql.ObjectConfig{
 				Fields: fields,
+				Name:   objtype.Name(),
 			})
 			t = CustomOutObjects[objtype]
 		}
