@@ -70,3 +70,13 @@ func getResolver(objtype reflect.Type) (query graphql.Fields, mutation graphql.F
 	}
 	return query, mutation, subscription
 }
+
+func mergeResolvers(fields ...graphql.Fields) graphql.Fields {
+	for _, v := range fields[1:] {
+		target := fields[0]
+		for key, val := range v {
+			target[key] = val
+		}
+	}
+	return fields[0]
+}
